@@ -1,0 +1,88 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`hot-polymer-monkey`
+Series of monkey patches for the polymer project, waiting for PRs to be evaluated/accepted/rejected — Edit
+
+@demo demo/index.html
+-->
+
+<dom-module id="hot-polymer-monkey">
+
+  <script>
+    Polymer({
+
+      is: 'hot-polymer-monkey',
+
+      ready: function(){
+
+        /* MONKEY PATCH iron-ajax, IMPLEMENTS:
+         * https://github.com/PolymerElements/iron-form/issues/153
+         * https://github.com/PolymerElements/iron-ajax/issues/214
+         * https://github.com/PolymerElements/iron-ajax/issues/183
+        */
+        var e = document.createElement('iron-request');
+        var p = Object.getPrototypeOf( e );
+        p._wwwFormUrlEncodePiece = function(str) {
+          // Spec says to normalize newlines to \r\n and replace %20 spaces with +.
+          // jQuery does this as well, so this is likely to be widely compatible.
+          if (str === null || str == undefined) {
+            return '';
+          }
+          return encodeURIComponent(str.toString().replace(/\r?\n/g, '\r\n'))
+              .replace(/%20/g, '+');
+        };
+
+
+        /* MONKEY PATCH paper-dropdown-menu, IMPLEMENTS:
+         * https://github.com/PolymerElements/paper-dropdown-menu/pull/195
+         */
+        var e = document.createElement('paper-dropdown-menu');
+        var p = Object.getPrototypeOf( e );
+
+        p._selectedItemChanged = function(selectedItem) {
+          var value = '';
+          var labelValue = '';
+          if (selectedItem) {
+
+            // It will return a value only if parameter is either truly or ''
+            // It actually returns an object containing the passed value or null,
+            // so that chained || will work.
+            function t( p ){ if( p || p === '' ) return { v: p }; };
+
+            // Value will be either the `value` attribute, or the `value`
+            //  property, or (no choice left) the `labelValue`
+            // NOTE: t() is used so that '' is considered truly
+            value = t( selectedItem.getAttribute('value') ) || t( selectedItem.value ) || t( selectedItem.label) || t( selectedItem.getAttribute('label') ) || t( selectedItem.textContent.trim() );
+            value = value.v || "";
+
+            // Label follows the same rules as above, minus the 'value' prop/att
+            // NOTE: t() is used so that '' is considered truly
+            labelValue = t( selectedItem.label ) || t( selectedItem.getAttribute('label') ) || t( selectedItem.textContent.trim() );
+            labelValue = labelValue.v;
+          }
+
+          this._setValue(value);
+          this._setSelectedItemLabel(labelValue);
+
+          // TODO: In actual patch there is no need for the 'getAttribute()' in the IF
+          if( this.autoValidate || 'string' === typeof this.getAttribute('auto-validate') )  {
+            var valid;
+            if (this.validate) {
+              valid = this.validate();
+            } else {
+              valid = this.checkValidity();
+            }
+            this.invalid = !valid;
+          }
+
+          this.fire('change');
+        };
+
+      },
+
+
+
+    });
+  </script>
+</dom-module>
