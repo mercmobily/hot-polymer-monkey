@@ -2,6 +2,16 @@
 
 Series of monkey patches for the polymer project, waiting for PRs to be evaluated/accepted/rejected — Edit
 
+MONKEY PATCH iron-ajax, IMPLEMENTS:
+ * https://github.com/PolymerElements/iron-form/issues/153
+ * https://github.com/PolymerElements/iron-ajax/issues/214
+ * https://github.com/PolymerElements/iron-ajax/issues/183
+
+MONKEY PATCH paper-dropdown-menu, IMPLEMENTS:
+ * https://github.com/PolymerElements/paper-dropdown-menu/pull/195
+ * https://github.com/PolymerElements/paper-dropdown-menu/pull/207
+
+
 ## Install the Polymer-CLI
 
 First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your application locally.
