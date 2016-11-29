@@ -2,7 +2,7 @@
 
 <!--
 `hot-polymer-monkey`
-Series of monkey patches for the polymer project, waiting for PRs to be evaluated/accepted/rejected — Edit
+Series of monkey patches for the polymer project, waiting for PRs to be evaluated/accepted/rejected
 
 @demo demo/index.html
 -->
@@ -32,6 +32,19 @@ Series of monkey patches for the polymer project, waiting for PRs to be evaluate
           return encodeURIComponent(str.toString().replace(/\r?\n/g, '\r\n'))
               .replace(/%20/g, '+');
         };
+
+        /* MONKEY PATCH app-drawer, IMPLEMENTS:
+          https://github.com/PolymerElements/app-layout/issues/385
+        */
+        var e = document.createElement('app-drawer');
+        var p = Object.getPrototypeOf( e );
+        p._openedPersistentChanged = function(){
+          if (this.transitionDuration === 0) {
+            // Reset drawer state now since there will be no transitionend event.
+            this._resetDrawerState();
+          }
+          this.fire('persistent-changed', { bubbles: false } );
+        }
 
 
         /* MONKEY PATCH paper-dropdown-menu, IMPLEMENTS:
