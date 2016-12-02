@@ -38,7 +38,7 @@ Series of monkey patches for the polymer project, waiting for PRs to be evaluate
         */
         var e = document.createElement('app-drawer');
         var p = Object.getPrototypeOf( e );
-        p._openedPersistentChanged = function(){
+        p._openedPersistentChangedDELETED_DELETED_DELETED = function(){
           if (this.transitionDuration === 0) {
             // Reset drawer state now since there will be no transitionend event.
             this._resetDrawerState();
