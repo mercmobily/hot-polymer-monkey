@@ -44,7 +44,6 @@ Series of monkey patches for the polymer project, waiting for PRs to be evaluate
         var p = Object.getPrototypeOf( e );
 
         p._resetCustomElements = function() {
-          debugger;
           // Reset all the registered custom components. We need to do this after
           // the native reset, since programmatically changing the `value` of some
           // native elements (iron-input in particular) does not notify its
@@ -65,7 +64,7 @@ Series of monkey patches for the polymer project, waiting for PRs to be evaluate
                 }
                 if( el._setValue ) {
                   el._setValue( value );
-                  if( el.contentElement && _valueChangedHack ) el._valueChangedHack( value );
+                  if( el.contentElement && el._valueChangedHack ) el._valueChangedHack( value );
                 } else {
                  el.value = value;
                 }
