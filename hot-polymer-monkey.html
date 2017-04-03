@@ -1,4 +1,4 @@
-<link rel="import" href="../polymer/polymer.html">
+s<link rel="import" href="../polymer/polymer.html">
 
 <!--
 `hot-polymer-monkey`
@@ -40,7 +40,7 @@ Series of monkey patches for the polymer project, waiting for PRs to be evaluate
         /**
          * Resets all non-disabled form custom elements to their initial values.
          */
-        var e = document.createElement('form', { is: 'iron-form' } );
+        var e = document.createElement('form', 'iron-form' );
         var p = Object.getPrototypeOf( e );
 
         p._resetCustomElements = function() {
